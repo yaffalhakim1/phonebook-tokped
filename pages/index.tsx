@@ -1,25 +1,49 @@
 import Head from "next/head";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-import { useQuery } from "@apollo/client";
-import { ContactResponse } from "@/types/contact_types";
-import { GET_CONTACT } from "@/resource/queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { ContactResponse, DeleteContactResponse } from "@/types/contact_types";
+import { DELETE_CONTACT, GET_CONTACT } from "@/resource/queries";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
 const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function Home() {
+  const { getFavoritesFromStorage, addToFavoritesStorage } = useLocalStorage();
+
   const { loading, error, data, fetchMore } = useQuery<ContactResponse>(
     GET_CONTACT,
     {
       variables: {
         offset: 0,
-        limit: 10,
+        limit: 20,
       },
     }
   );
 
-  const { getFavoritesFromStorage, addToFavoritesStorage } = useLocalStorage();
+  const [deleteContact, { loading: deleteLoading, error: deleteError }] =
+    useMutation<DeleteContactResponse>(DELETE_CONTACT);
+  // const [deleteContact] = useMutation<DeleteContactResponse>(DELETE_CONTACT);
+
+  const handleDelete = async (contactId: number) => {
+    try {
+      const response = await deleteContact({ variables: { id: contactId } });
+      const deleted = response?.data?.delete_contact_by_pk;
+      if (deleted) {
+        alert(`Deleted contact: ${deleted.first_name} ${deleted.last_name}`);
+      } else {
+        // Handle failure. The contact was not deleted for some reason.
+        alert("Failed to delete contact.");
+      }
+    } catch (error) {
+      alert("Error occurred while deleting contact.");
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+  if (deleteLoading) return <p>deleting...</p>;
+  if (deleteError) return <p>Error deleteing </p>;
 
   const favorites = getFavoritesFromStorage();
   const favContacts = data?.contact.filter((contact) =>
@@ -28,9 +52,6 @@ export default function Home() {
   const regContacts = data?.contact.filter(
     (contact) => !favorites.includes(contact.id)
   );
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
 
   return (
     <>
@@ -53,7 +74,7 @@ export default function Home() {
             </div>
           ))}
           <h2>Regular contac</h2>
-          {regContacts?.map((contact) => (
+          {regContacts?.slice(0, 10).map((contact) => (
             <div key={contact.id}>
               <h3>{contact.first_name}</h3>
               {contact.phones.map((phone, index: number) => (
@@ -62,8 +83,29 @@ export default function Home() {
               <button onClick={() => addToFavoritesStorage(contact.id)}>
                 Add to Fav
               </button>
+              <button onClick={() => handleDelete(contact.id)}>
+                Delete Contact
+              </button>
             </div>
           ))}
+          <button
+            onClick={() =>
+              fetchMore({
+                variables: {
+                  offset: data?.contact.length,
+                },
+                updateQuery: (prev, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) return prev;
+                  return {
+                    ...fetchMoreResult,
+                    contact: [...prev.contact, ...fetchMoreResult.contact],
+                  };
+                },
+              })
+            }
+          >
+            Fetch More
+          </button>
         </div>
       </main>
     </>

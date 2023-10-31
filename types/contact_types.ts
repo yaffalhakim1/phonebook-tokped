@@ -13,3 +13,11 @@ type Contact = {
 export type ContactResponse = {
   contact: Contact[];
 };
+
+export type DeleteContactResponse = {
+  delete_contact_by_pk: {
+    first_name: string;
+    last_name: string;
+    id: number;
+  };
+};
