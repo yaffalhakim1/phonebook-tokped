@@ -5,8 +5,10 @@ import { useQuery, useMutation } from "@apollo/client";
 import { ContactResponse, DeleteContactResponse } from "@/types/contact_types";
 import { DELETE_CONTACT, GET_CONTACT } from "@/resource/queries";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { css } from "@emotion/react";
+import { Button } from "@/styles/style";
 
-const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
+const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function Home() {
   const { getFavoritesFromStorage, addToFavoritesStorage } = useLocalStorage();
@@ -23,7 +25,6 @@ export default function Home() {
 
   const [deleteContact, { loading: deleteLoading, error: deleteError }] =
     useMutation<DeleteContactResponse>(DELETE_CONTACT);
-  // const [deleteContact] = useMutation<DeleteContactResponse>(DELETE_CONTACT);
 
   const handleDelete = async (contactId: number) => {
     try {
@@ -32,7 +33,6 @@ export default function Home() {
       if (deleted) {
         alert(`Deleted contact: ${deleted.first_name} ${deleted.last_name}`);
       } else {
-        // Handle failure. The contact was not deleted for some reason.
         alert("Failed to delete contact.");
       }
     } catch (error) {
@@ -61,7 +61,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`${styles.main} ${inter.className}`}>
+      <main>
         <div className={styles.description}></div>
         <div>
           <h2>Fav Contact</h2>
@@ -83,9 +83,9 @@ export default function Home() {
               <button onClick={() => addToFavoritesStorage(contact.id)}>
                 Add to Fav
               </button>
-              <button onClick={() => handleDelete(contact.id)}>
+              <Button onClick={() => handleDelete(contact.id)}>
                 Delete Contact
-              </button>
+              </Button>
             </div>
           ))}
           <button
