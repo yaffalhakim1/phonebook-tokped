@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ChakraProvider } from "@chakra-ui/react";
 
 const client = new ApolloClient({
   uri: "https://wpe-hiring.tokopedia.net/graphql",
@@ -10,7 +11,9 @@ const client = new ApolloClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
     </ApolloProvider>
   );
 }

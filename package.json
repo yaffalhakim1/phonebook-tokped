@@ -12,9 +12,12 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.6",
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.15",
+    "@tanstack/react-table": "^8.10.7",
+    "framer-motion": "^10.16.4",
     "graphql": "^16.8.1",
     "next": "14.0.0",
     "react": "^18",

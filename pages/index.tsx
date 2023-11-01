@@ -1,12 +1,29 @@
 import Head from "next/head";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import styles from "@/styles/Home.module.css";
 import { useQuery, useMutation } from "@apollo/client";
 import { ContactResponse, DeleteContactResponse } from "@/types/contact_types";
 import { DELETE_CONTACT, GET_CONTACT } from "@/resource/queries";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { css } from "@emotion/react";
-import { Button } from "@/styles/style";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Container,
+  Flex,
+  Heading,
+  Spacer,
+  Stack,
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Tfoot,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -61,53 +78,105 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className={styles.description}></div>
-        <div>
-          <h2>Fav Contact</h2>
-          {favContacts?.map((contact) => (
-            <div key={contact.id}>
-              <h3>{contact.first_name}</h3>
-              {contact.phones.map((phone, index: number) => (
-                <p key={index}>{phone.number}</p>
-              ))}
-            </div>
-          ))}
-          <h2>Regular contac</h2>
-          {regContacts?.slice(0, 10).map((contact) => (
-            <div key={contact.id}>
-              <h3>{contact.first_name}</h3>
-              {contact.phones.map((phone, index: number) => (
-                <p key={index}>{phone.number}</p>
-              ))}
-              <button onClick={() => addToFavoritesStorage(contact.id)}>
-                Add to Fav
-              </button>
-              <Button onClick={() => handleDelete(contact.id)}>
-                Delete Contact
-              </Button>
-            </div>
-          ))}
-          <button
-            onClick={() =>
-              fetchMore({
-                variables: {
-                  offset: data?.contact.length,
-                },
-                updateQuery: (prev, { fetchMoreResult }) => {
-                  if (!fetchMoreResult) return prev;
-                  return {
-                    ...fetchMoreResult,
-                    contact: [...prev.contact, ...fetchMoreResult.contact],
-                  };
-                },
-              })
-            }
-          >
-            Fetch More
-          </button>
-        </div>
-      </main>
+      <Container maxW="md">
+        <main className={jakarta.className}>
+          {/* <div className={styles.description}></div> */}
+          <Flex minWidth="max-content" alignItems="center" gap="2" p="2">
+            <Box>
+              <Heading size="md">Phonebook Tokopedia</Heading>
+            </Box>
+            <Spacer />
+            <ButtonGroup gap="2">
+              <Button colorScheme="teal">Sign Up</Button>
+              <Button colorScheme="teal">Log in</Button>
+            </ButtonGroup>
+          </Flex>
+          <div>
+            <Text as="b">Fav Contact</Text>
+
+            <TableContainer>
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Name</Th>
+                    <Th>Phone Number</Th>
+                  </Tr>
+                </Thead>
+                {favContacts?.map((contact) => (
+                  <div key={contact.id}>
+                    <Tbody>
+                      <Tr>
+                        <Td>{contact.first_name}</Td>
+                        <Td>
+                          {contact.phones.map((phone, index: number) => (
+                            <div key={index}>{phone.number}</div>
+                          ))}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </div>
+                ))}
+
+                <h2>Regular contact</h2>
+
+                {regContacts?.slice(0, 10).map((contact) => (
+                  <div key={contact.id}>
+                    <Tbody>
+                      <Tr>
+                        <Td>{contact.first_name}</Td>
+                        <Td>
+                          {contact.phones.map((phone, index: number) => (
+                            <div key={index}>{phone.number}</div>
+                          ))}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </div>
+                ))}
+              </Table>
+            </TableContainer>
+
+            {/* <h3>{contact.first_name}</h3>
+                {contact.phones.map((phone, index: number) => (
+                  <p key={index}>{phone.number}</p>
+                ))}
+                <ButtonGroup gap="2">
+                  <Button
+                    colorScheme="green"
+                    onClick={() => addToFavoritesStorage(contact.id)}
+                  >
+                    Add to Fav
+                  </Button>
+                  <Button
+                    colorScheme="red"
+                    onClick={() => handleDelete(contact.id)}
+                  >
+                    Delete Contact
+                  </Button>
+                </ButtonGroup>
+              </div>
+            ))} */}
+            <button
+              onClick={() =>
+                fetchMore({
+                  variables: {
+                    offset: data?.contact.length,
+                  },
+                  updateQuery: (prev, { fetchMoreResult }) => {
+                    if (!fetchMoreResult) return prev;
+                    return {
+                      ...fetchMoreResult,
+                      contact: [...prev.contact, ...fetchMoreResult.contact],
+                    };
+                  },
+                })
+              }
+            >
+              Fetch More
+            </button>
+          </div>
+        </main>
+      </Container>
     </>
   );
 }
