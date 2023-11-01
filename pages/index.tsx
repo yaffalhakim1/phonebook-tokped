@@ -12,18 +12,19 @@ import {
   Flex,
   Heading,
   Spacer,
-  Stack,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
+  IconButton,
 } from "@chakra-ui/react";
+import AddContact from "./contacts/addcontact";
+import { StarIcon, DeleteIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -78,21 +79,19 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Container maxW="md">
+      <Container maxW="container.sm">
         <main className={jakarta.className}>
-          {/* <div className={styles.description}></div> */}
           <Flex minWidth="max-content" alignItems="center" gap="2" p="2">
             <Box>
               <Heading size="md">Phonebook Tokopedia</Heading>
             </Box>
             <Spacer />
-            <ButtonGroup gap="2">
-              <Button colorScheme="teal">Sign Up</Button>
-              <Button colorScheme="teal">Log in</Button>
-            </ButtonGroup>
+            <AddContact />
           </Flex>
           <div>
-            <Text as="b">Fav Contact</Text>
+            <Text p="2" as="b">
+              Fav Contact
+            </Text>
 
             <TableContainer>
               <Table variant="simple">
@@ -100,62 +99,61 @@ export default function Home() {
                   <Tr>
                     <Th>Name</Th>
                     <Th>Phone Number</Th>
+                    <Th>Actions</Th>
                   </Tr>
                 </Thead>
-                {favContacts?.map((contact) => (
-                  <div key={contact.id}>
-                    <Tbody>
-                      <Tr>
-                        <Td>{contact.first_name}</Td>
-                        <Td>
-                          {contact.phones.map((phone, index: number) => (
-                            <div key={index}>{phone.number}</div>
-                          ))}
-                        </Td>
-                      </Tr>
-                    </Tbody>
-                  </div>
-                ))}
+                <Tbody>
+                  {favContacts?.map((contact) => (
+                    <Tr key={contact.id}>
+                      <Td>{contact.first_name}</Td>
+                      <Td>
+                        {contact.phones.map((phone, index: number) => (
+                          <div key={index}>{phone.number}</div>
+                        ))}
+                      </Td>
+                      <Td></Td>
+                    </Tr>
+                  ))}
 
-                <h2>Regular contact</h2>
-
-                {regContacts?.slice(0, 10).map((contact) => (
-                  <div key={contact.id}>
-                    <Tbody>
-                      <Tr>
-                        <Td>{contact.first_name}</Td>
-                        <Td>
-                          {contact.phones.map((phone, index: number) => (
-                            <div key={index}>{phone.number}</div>
-                          ))}
-                        </Td>
-                      </Tr>
-                    </Tbody>
-                  </div>
-                ))}
+                  <Text mt="4" p="2" as="b">
+                    Regular contact
+                  </Text>
+                  {regContacts?.slice(0, 10).map((contact) => (
+                    <Tr key={contact.id}>
+                      <Td>{contact.first_name}</Td>
+                      <Td>
+                        {contact.phones.map((phone, index: number) => (
+                          <div key={index}>{phone.number}</div>
+                        ))}
+                      </Td>
+                      <Td>
+                        <ButtonGroup gap="2">
+                          <IconButton
+                            icon={<StarIcon />}
+                            size="sm"
+                            colorScheme="green"
+                            onClick={() => addToFavoritesStorage(contact.id)}
+                            aria-label={""}
+                          >
+                            Add to Fav
+                          </IconButton>
+                          <IconButton
+                            size="sm"
+                            colorScheme="red"
+                            aria-label={""}
+                            icon={<DeleteIcon />}
+                            onClick={() => handleDelete(contact.id)}
+                          >
+                            Delete Contact
+                          </IconButton>
+                        </ButtonGroup>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
               </Table>
             </TableContainer>
 
-            {/* <h3>{contact.first_name}</h3>
-                {contact.phones.map((phone, index: number) => (
-                  <p key={index}>{phone.number}</p>
-                ))}
-                <ButtonGroup gap="2">
-                  <Button
-                    colorScheme="green"
-                    onClick={() => addToFavoritesStorage(contact.id)}
-                  >
-                    Add to Fav
-                  </Button>
-                  <Button
-                    colorScheme="red"
-                    onClick={() => handleDelete(contact.id)}
-                  >
-                    Delete Contact
-                  </Button>
-                </ButtonGroup>
-              </div>
-            ))} */}
             <button
               onClick={() =>
                 fetchMore({
