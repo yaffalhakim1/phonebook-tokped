@@ -203,7 +203,9 @@ export default function Home() {
                             >
                               Delete Contact
                             </MenuItem>
-                            <EditContactUser contactId={contact.id} />
+                            <MenuItem>
+                              <EditContactUser contactId={contact.id} />
+                            </MenuItem>
                           </MenuList>
                         </Menu>
                       </Td>
@@ -248,7 +250,9 @@ export default function Home() {
                             >
                               Delete Contact
                             </MenuItem>
-                            <EditContactUser contactId={contact.id} />
+                            <MenuItem>
+                              <EditContactUser contactId={contact.id} />
+                            </MenuItem>{" "}
                           </MenuList>
                         </Menu>
                       </Td>
@@ -259,14 +263,16 @@ export default function Home() {
             </TableContainer>
             <Center>
               <ButtonGroup mt={3} mb={8}>
-                <Button
+                <Box
+                  as="button"
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
                   Previous
-                </Button>
-                <Tag>{currentPage}</Tag>
-                <Button onClick={() => goToPage(currentPage + 1)}>Next</Button>
+                </Box>
+                <Box as="button" onClick={() => goToPage(currentPage + 1)}>
+                  Next
+                </Box>
               </ButtonGroup>
             </Center>
           </div>

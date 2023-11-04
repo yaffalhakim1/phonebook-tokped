@@ -18,6 +18,7 @@ import {
   Input,
   ModalFooter,
   MenuItem,
+  Box,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "@chakra-ui/react";
@@ -138,9 +139,10 @@ export default function EditContactUser({ contactId }: EditContactProps) {
 
   return (
     <>
-      <MenuItem onClick={onOpen} icon={<EditIcon />}>
+      <Box display="flex" as="button" onClick={onOpen}>
+        <EditIcon mr="2" />
         Edit Contact
-      </MenuItem>
+      </Box>
 
       <Modal
         initialFocusRef={initialRef}
