@@ -1,5 +1,5 @@
 import { ADD_CONTACT_WITH_PHONES } from "@/resource/queries";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   useDisclosure,
   Button,
@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { useToast } from "@chakra-ui/react";
+import { checkUniqueness } from "@/resource/helper";
 
 export default function AddContact() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -39,11 +40,6 @@ export default function AddContact() {
 
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-
-  function checkUniqueness(str: string) {
-    const pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-    return pattern.test(str);
-  }
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -142,7 +138,6 @@ export default function AddContact() {
                   colorScheme="blue"
                   mt={4}
                 >
-                  {" "}
                   Add more number{" "}
                 </Button>
               </FormControl>

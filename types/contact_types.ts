@@ -31,11 +31,9 @@ export type DeleteContactResponse = {
   };
 };
 
-// TypeScript interfaces/types for the GraphQL operations
 export type ContactSetInput = {
   first_name?: string;
   last_name?: string;
-  // Add other contact fields as needed
 };
 
 export type PhonePkColumnsInput = {

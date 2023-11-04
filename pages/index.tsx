@@ -29,6 +29,7 @@ import {
   MenuItem,
   MenuList,
   useToast,
+  Tag,
 } from "@chakra-ui/react";
 import AddContact from "./contacts/addcontact";
 import { StarIcon, DeleteIcon, ChevronDownIcon } from "@chakra-ui/icons";
@@ -38,7 +39,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export default function Home() {
   const { getFavoritesFromStorage, addToFavoritesStorage } = useLocalStorage();
   const [searchQuery, setSearchQuery] = useState("");
-  const ITEMS_PER_PAGE = 20;
+  const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const toast = useToast();
 
@@ -49,6 +50,10 @@ export default function Home() {
       where: searchQuery ? { first_name: { _ilike: `%${searchQuery}%` } } : {},
     },
   });
+
+  const goToPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
 
   const [deleteContact, { loading: deleteLoading, error: deleteError }] =
     useMutation<DeleteContactResponse>(DELETE_CONTACT);
@@ -255,18 +260,13 @@ export default function Home() {
             <Center>
               <ButtonGroup mt={3} mb={8}>
                 <Button
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
                   Previous
                 </Button>
-
-                <Button
-                  onClick={() => setCurrentPage(currentPage + 1)}
-                  // disabled={data?.contact?.length? < ITEMS_PER_PAGE}
-                >
-                  Next
-                </Button>
+                <Tag>{currentPage}</Tag>
+                <Button onClick={() => goToPage(currentPage + 1)}>Next</Button>
               </ButtonGroup>
             </Center>
           </div>

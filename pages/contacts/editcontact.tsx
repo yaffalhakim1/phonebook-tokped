@@ -28,6 +28,7 @@ import {
   GetContactDetailData,
   GetContactDetailVars,
 } from "@/types/contact_types";
+import { checkUniqueness } from "@/resource/helper";
 
 interface EditContactProps {
   contactId: number;
@@ -66,14 +67,8 @@ export default function EditContactUser({ contactId }: EditContactProps) {
 
   const contact = dataedit?.contact_by_pk;
 
-  function checkUniqueness(str: string) {
-    const pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-    return pattern.test(str);
-  }
-
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const formData = new FormData(event.currentTarget);
     const first_name = formData.get("first_name")?.toString().trim();
     const last_name = formData.get("last_name")?.toString().trim();
@@ -101,7 +96,6 @@ export default function EditContactUser({ contactId }: EditContactProps) {
 
       contact?.phones.forEach(async (phone, index) => {
         const newNumber = formData.get(`phone${index}`) as string;
-
         if (newNumber && newNumber !== phone.number) {
           await editPhoneNumberMutation({
             variables: {
@@ -114,7 +108,6 @@ export default function EditContactUser({ contactId }: EditContactProps) {
           });
         }
       });
-
       toast({
         title: "Contact Edited",
         status: "success",
@@ -124,7 +117,6 @@ export default function EditContactUser({ contactId }: EditContactProps) {
       window.location.reload();
       onClose();
     } catch (error) {
-      // Handle submission error
       console.error("Failed to edit contact:", error);
       return toast({
         title: "Failed to edit contact",

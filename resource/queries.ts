@@ -87,7 +87,6 @@ export const EDIT_CONTACT_NUMBER = gql`
         id
         last_name
         first_name
-        # Include other fields if necessary
         phones {
           number
         }
