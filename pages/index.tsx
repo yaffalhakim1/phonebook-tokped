@@ -4,6 +4,8 @@ import { useQuery, useMutation } from "@apollo/client";
 import { ContactResponse, DeleteContactResponse } from "@/types/contact_types";
 import { DELETE_CONTACT, GET_CONTACT } from "@/resource/queries";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useState } from "react";
+
 import {
   Box,
   Button,
@@ -21,6 +23,8 @@ import {
   Thead,
   Tr,
   IconButton,
+  Input,
+  Center,
 } from "@chakra-ui/react";
 import AddContact from "./contacts/addcontact";
 import { StarIcon, DeleteIcon } from "@chakra-ui/icons";
@@ -30,16 +34,17 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function Home() {
   const { getFavoritesFromStorage, addToFavoritesStorage } = useLocalStorage();
+  const [searchQuery, setSearchQuery] = useState("");
+  const ITEMS_PER_PAGE = 20;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { loading, error, data, fetchMore } = useQuery<ContactResponse>(
-    GET_CONTACT,
-    {
-      variables: {
-        offset: 0,
-        limit: 20,
-      },
-    }
-  );
+  const { loading, error, data } = useQuery<ContactResponse>(GET_CONTACT, {
+    variables: {
+      offset: (currentPage - 1) * ITEMS_PER_PAGE,
+      limit: ITEMS_PER_PAGE,
+      where: searchQuery ? { first_name: { _ilike: `%${searchQuery}%` } } : {},
+    },
+  });
 
   const [deleteContact, { loading: deleteLoading, error: deleteError }] =
     useMutation<DeleteContactResponse>(DELETE_CONTACT);
@@ -58,9 +63,19 @@ export default function Home() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <Center>
+        <Text>Loading...</Text>;
+      </Center>
+    );
   if (error) return <p>Error : {error.message}</p>;
-  if (deleteLoading) return <p>deleting...</p>;
+  if (deleteLoading)
+    return (
+      <Center>
+        <Text>Deleting...</Text>;
+      </Center>
+    );
   if (deleteError) return <p>Error deleteing </p>;
 
   const favorites = getFavoritesFromStorage();
@@ -80,8 +95,29 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Container maxW="container.sm">
+        <Flex>
+          <Input
+            mt={8}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search by name..."
+          />
+          <Button
+            colorScheme="teal"
+            size="md"
+            ml={3}
+            mt={8}
+            onClick={() => {
+              setSearchQuery(searchQuery);
+            }}
+          >
+            Search
+          </Button>
+        </Flex>
+
         <main className={jakarta.className}>
-          <Flex minWidth="max-content" alignItems="center" gap="2" p="2">
+          <Flex minWidth="max-content" alignItems="center" gap="2" p="2" mt={4}>
             <Box>
               <Heading size="md">Phonebook Tokopedia</Heading>
             </Box>
@@ -89,9 +125,7 @@ export default function Home() {
             <AddContact />
           </Flex>
           <div>
-            <Text p="2" as="b">
-              Fav Contact
-            </Text>
+            <Text mt={4}>Fav Contact</Text>
 
             <TableContainer>
               <Table variant="simple">
@@ -153,25 +187,23 @@ export default function Home() {
                 </Tbody>
               </Table>
             </TableContainer>
+            <Center>
+              <ButtonGroup mt={3}>
+                <Button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
 
-            <button
-              onClick={() =>
-                fetchMore({
-                  variables: {
-                    offset: data?.contact.length,
-                  },
-                  updateQuery: (prev, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) return prev;
-                    return {
-                      ...fetchMoreResult,
-                      contact: [...prev.contact, ...fetchMoreResult.contact],
-                    };
-                  },
-                })
-              }
-            >
-              Fetch More
-            </button>
+                <Button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  // disabled={data?.contact?.length? < ITEMS_PER_PAGE}
+                >
+                  Next
+                </Button>
+              </ButtonGroup>
+            </Center>
           </div>
         </main>
       </Container>
