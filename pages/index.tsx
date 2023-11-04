@@ -32,6 +32,7 @@ import {
 } from "@chakra-ui/react";
 import AddContact from "./contacts/addcontact";
 import { StarIcon, DeleteIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import EditContactUser from "./contacts/editcontact";
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function Home() {
@@ -185,31 +186,19 @@ export default function Home() {
                             Options
                           </MenuButton>
                           <MenuList>
-                            <MenuItem>
-                              {" "}
-                              <Button
-                                leftIcon={<StarIcon />}
-                                size="sm"
-                                colorScheme="green"
-                                onClick={() =>
-                                  addToFavoritesStorage(contact.id)
-                                }
-                                aria-label={""}
-                              >
-                                Add to Fav
-                              </Button>
+                            <MenuItem
+                              icon={<StarIcon />}
+                              onClick={() => addToFavoritesStorage(contact.id)}
+                            >
+                              Add to Fav
                             </MenuItem>
-                            <MenuItem>
-                              <Button
-                                size="sm"
-                                colorScheme="red"
-                                aria-label={""}
-                                leftIcon={<DeleteIcon />}
-                                onClick={() => handleDelete(contact.id)}
-                              >
-                                Delete Contact
-                              </Button>
+                            <MenuItem
+                              onClick={() => handleDelete(contact.id)}
+                              icon={<DeleteIcon />}
+                            >
+                              Delete Contact
                             </MenuItem>
+                            <EditContactUser contactId={contact.id} />
                           </MenuList>
                         </Menu>
                       </Td>
@@ -224,7 +213,7 @@ export default function Home() {
                   >
                     Contacts
                   </Text>
-                  {regContacts?.slice(0, 10).map((contact) => (
+                  {regContacts?.map((contact) => (
                     <Tr key={contact.id}>
                       <Td>{contact.first_name}</Td>
                       <Td>
@@ -242,31 +231,19 @@ export default function Home() {
                             Options
                           </MenuButton>
                           <MenuList>
-                            <MenuItem>
-                              {" "}
-                              <Button
-                                leftIcon={<StarIcon />}
-                                size="sm"
-                                colorScheme="green"
-                                onClick={() =>
-                                  addToFavoritesStorage(contact.id)
-                                }
-                                aria-label={""}
-                              >
-                                Add to Fav
-                              </Button>
+                            <MenuItem
+                              icon={<StarIcon />}
+                              onClick={() => addToFavoritesStorage(contact.id)}
+                            >
+                              Add to Fav
                             </MenuItem>
-                            <MenuItem>
-                              <Button
-                                size="sm"
-                                colorScheme="red"
-                                aria-label={""}
-                                leftIcon={<DeleteIcon />}
-                                onClick={() => handleDelete(contact.id)}
-                              >
-                                Delete Contact
-                              </Button>
+                            <MenuItem
+                              onClick={() => handleDelete(contact.id)}
+                              icon={<DeleteIcon />}
+                            >
+                              Delete Contact
                             </MenuItem>
+                            <EditContactUser contactId={contact.id} />
                           </MenuList>
                         </Menu>
                       </Td>
