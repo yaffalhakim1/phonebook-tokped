@@ -40,12 +40,26 @@ export default function AddContact() {
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
+  function checkUniqueness(str: string) {
+    const pattern = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    return pattern.test(str);
+  }
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const first_name = formData.get("first_name");
-    const last_name = formData.get("last_name");
-    // const phones = formData.getAll("phone");
+    const first_name = formData.get("first_name")?.toString().trim();
+    const last_name = formData.get("last_name")?.toString().trim();
+
+    if (checkUniqueness(first_name!) || checkUniqueness(last_name!)) {
+      toast({
+        title: "Names should not contain special characters.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
     try {
       await addContactWithPhones({
@@ -64,10 +78,9 @@ export default function AddContact() {
         duration: 3000,
         isClosable: true,
       });
+      window.location.reload();
     } catch (e) {
       throw new Error("failed adding to contact", error);
-
-      // Handle the error
     }
   };
 
