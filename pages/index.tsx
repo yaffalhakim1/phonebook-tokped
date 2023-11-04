@@ -32,8 +32,6 @@ import {
 } from "@chakra-ui/react";
 import AddContact from "./contacts/addcontact";
 import { StarIcon, DeleteIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import Link from "next/link";
-
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function Home() {
