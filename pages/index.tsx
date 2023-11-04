@@ -175,7 +175,44 @@ export default function Home() {
                           <div key={index}>{phone.number}</div>
                         ))}
                       </Td>
-                      <Td></Td>
+                      <Td>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size="sm"
+                            rightIcon={<ChevronDownIcon />}
+                          >
+                            Options
+                          </MenuButton>
+                          <MenuList>
+                            <MenuItem>
+                              {" "}
+                              <Button
+                                leftIcon={<StarIcon />}
+                                size="sm"
+                                colorScheme="green"
+                                onClick={() =>
+                                  addToFavoritesStorage(contact.id)
+                                }
+                                aria-label={""}
+                              >
+                                Add to Fav
+                              </Button>
+                            </MenuItem>
+                            <MenuItem>
+                              <Button
+                                size="sm"
+                                colorScheme="red"
+                                aria-label={""}
+                                leftIcon={<DeleteIcon />}
+                                onClick={() => handleDelete(contact.id)}
+                              >
+                                Delete Contact
+                              </Button>
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Td>
                     </Tr>
                   ))}
                   <Text
