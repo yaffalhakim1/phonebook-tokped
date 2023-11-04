@@ -131,7 +131,7 @@ export default function Home() {
         </Flex>
         <Flex>
           <Input
-            mt={8}
+            mt={5}
             ml={6}
             type="text"
             value={searchQuery}
@@ -142,7 +142,7 @@ export default function Home() {
             colorScheme="teal"
             size="md"
             ml={3}
-            mt={8}
+            mt={5}
             onClick={() => {
               setSearchQuery(searchQuery);
             }}
@@ -252,7 +252,7 @@ export default function Home() {
                             </MenuItem>
                             <MenuItem>
                               <EditContactUser contactId={contact.id} />
-                            </MenuItem>{" "}
+                            </MenuItem>
                           </MenuList>
                         </Menu>
                       </Td>
@@ -264,13 +264,13 @@ export default function Home() {
             <Center>
               <ButtonGroup mt={3} mb={8}>
                 <Box
-                  as="button"
+                  as={Button}
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
                   Previous
                 </Box>
-                <Box as="button" onClick={() => goToPage(currentPage + 1)}>
+                <Box as={Button} onClick={() => goToPage(currentPage + 1)}>
                   Next
                 </Box>
               </ButtonGroup>
