@@ -63,11 +63,17 @@ export default function Home() {
           duration: 3000,
           isClosable: true,
         });
+        window.location.reload();
       } else {
-        alert("Failed to delete contact.");
+        toast({
+          title: "Failed to deleting contact",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       }
     } catch (error) {
-      alert("Error occurred while deleting contact.");
+      throw new Error("Error occurred while deleting contact.");
     }
   };
 
