@@ -76,14 +76,14 @@ export default function Home() {
   if (loading)
     return (
       <Center>
-        <Text>Loading...</Text>;
+        <Text>Loading...</Text>
       </Center>
     );
   if (error) return <p>Error : {error.message}</p>;
   if (deleteLoading)
     return (
       <Center>
-        <Text>Deleting...</Text>;
+        <Text>Deleting...</Text>
       </Center>
     );
   if (deleteError) return <p>Error deleteing </p>;
